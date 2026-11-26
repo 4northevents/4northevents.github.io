@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4N Events · Tournament Guide</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="4N Events · Official Tournament Guide">
+<meta property="og:description" content="Everything you need for this weekend's tournament: check-in, shirts, rules, map and more.">
+<meta property="og:image" content="https://4northevents.github.io/winter-classic/art.jpg">
+<meta name="robots" content="noindex">
+<style>
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#011a39;color:#eef8ff;font:17px/1.5 system-ui,sans-serif;text-align:center;padding:24px}
+b{display:block;font-size:28px;margin-bottom:8px}a{color:#9fdcff}
+</style>
+<script>
+// Tournament guides, in date order. Add a line here for each new guide.
+// The /guide link opens the first tournament whose last day hasn't passed yet.
+var EVENTS = [
+  { page: "../winter-classic/", lastDay: "2027-02-14" }
+];
+(function(){
+  var now = new Date(), today = now.getFullYear()*10000 + (now.getMonth()+1)*100 + now.getDate();
+  for (var i = 0; i < EVENTS.length; i++) {
+    if (Number(EVENTS[i].lastDay.replace(/-/g, "")) >= today) { location.replace(EVENTS[i].page); return; }
+  }
+  window.__none = true;
+})();
+</script>
+</head>
+<body>
+<div id="msg"><b>4N Events</b>Loading the tournament guide…</div>
+<script>
+if (window.__none) document.getElementById('msg').innerHTML = '<b>4N Events</b>The next tournament guide is coming soon.<br>Questions? Call <a href="tel:4322028939">432-202-8939</a> or visit the <a href="../helpdesk/">Help Desk</a>.';
+</script>
+<noscript><p><a href="../winter-classic/">Open the tournament guide</a></p></noscript>
+</body>
+</html>
