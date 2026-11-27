@@ -204,7 +204,9 @@ section.shirt{background:linear-gradient(135deg,#ff3d8b,#c2185b 60%,#7a1048);bor
 #updmore{margin-bottom:4px}
 #updmore[hidden]{display:none}
 .homescreen{margin-top:14px;max-width:460px}
-.homescreen summary{cursor:pointer;font-weight:800;color:var(--ice);min-height:44px;display:flex;align-items:center}
+.homescreen summary{cursor:pointer;font-weight:800;font-size:16px;color:var(--deep);background:var(--ball);border-radius:14px;padding:10px 16px;min-height:44px;display:flex;align-items:center;list-style:none;box-shadow:0 0 18px rgba(226,255,59,.45)}
+.homescreen summary::-webkit-details-marker{display:none}
+.homescreen[open] summary{margin-bottom:8px}
 .homescreen p{font-size:15px;margin:6px 0 10px}
 .alerts{grid-column:1/-1;margin:0;background:var(--card);border:2px solid var(--pink);box-shadow:0 0 24px rgba(255,61,139,.2);border-radius:18px}
 .alerts summary{display:flex;align-items:center;gap:12px;padding:14px 16px}
@@ -239,7 +241,7 @@ section.shirt{background:linear-gradient(135deg,#ff3d8b,#c2185b 60%,#7a1048);bor
         <button class="btn" id="share" type="button">Share this page</button>
       </div>
       <details class="homescreen">
-        <summary>Save it to your phone for the weekend</summary>
+        <summary>🚨 Save this guide to your phone's home screen! 📲</summary>
         <p>Add this guide to your home screen and it opens like an app, with the Winter Classic logo as its icon.</p>
         <p><strong>iPhone:</strong> open this page in Safari, tap the Share button (the square with the arrow), then <strong>Add to Home Screen</strong> and <strong>Add</strong>.</p>
         <p><strong>Android:</strong> in Chrome, tap the <strong>⋮</strong> menu, then <strong>Add to Home screen</strong> and <strong>Add</strong>.</p>
