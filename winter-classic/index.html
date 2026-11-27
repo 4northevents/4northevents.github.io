@@ -203,7 +203,13 @@ section.shirt{background:linear-gradient(135deg,#ff3d8b,#c2185b 60%,#7a1048);bor
 .upd .rm{background:none;border:0;color:var(--ice);font:700 14px Outfit,sans-serif;padding:6px 0;cursor:pointer;min-height:32px}
 #updmore{margin-bottom:4px}
 #updmore[hidden]{display:none}
-.homescreen{margin-top:14px;max-width:460px}
+.hsbox{display:flex;gap:16px;align-items:center;margin-top:16px;max-width:560px;background:var(--card);border:2px solid var(--ball);border-radius:20px;padding:14px 16px;box-shadow:0 0 22px rgba(226,255,59,.2)}
+.phone{width:118px;height:auto;flex:none}
+.hstext{flex:1}
+.hstext>b{display:block;font:20px/1.15 'Alfa Slab One',serif;color:var(--ball);margin-bottom:4px}
+.hstext>span{display:block;font-size:15px;line-height:1.4;color:var(--ice2)}
+.homescreen{margin-top:12px}
+@media(max-width:420px){.phone{width:96px}.hstext>b{font-size:18px}}
 .homescreen summary{cursor:pointer;font-weight:800;font-size:16px;color:var(--deep);background:var(--ball);border-radius:14px;padding:10px 16px;min-height:44px;display:flex;align-items:center;list-style:none;box-shadow:0 0 18px rgba(226,255,59,.45)}
 .homescreen summary::-webkit-details-marker{display:none}
 .homescreen[open] summary{margin-bottom:8px}
@@ -240,12 +246,40 @@ section.shirt{background:linear-gradient(135deg,#ff3d8b,#c2185b 60%,#7a1048);bor
       <div class="row">
         <button class="btn" id="share" type="button">Share this page</button>
       </div>
+      <div class="hsbox">
+        <svg class="phone" viewBox="0 0 150 290" role="img" aria-label="A phone home screen with the Winter Classic guide saved as an app icon">
+          <defs>
+            <linearGradient id="scr" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#6a4fc0"/><stop offset="1" stop-color="#22236b"/></linearGradient>
+            <clipPath id="wcIcon"><rect x="47" y="150" width="56" height="56" rx="13"/></clipPath>
+          </defs>
+          <rect x="2" y="2" width="146" height="286" rx="26" fill="#0b0b0f" stroke="#3a3f4a" stroke-width="3"/>
+          <rect x="10" y="10" width="130" height="270" rx="19" fill="url(#scr)"/>
+          <rect x="56" y="16" width="38" height="9" rx="4.5" fill="#0b0b0f"/>
+          <text x="22" y="24" font-size="8" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">9:41</text>
+          <g opacity=".55">
+            <rect x="20" y="40" width="22" height="22" rx="6" fill="#8fd18f"/><rect x="50" y="40" width="22" height="22" rx="6" fill="#f2b45c"/><rect x="80" y="40" width="22" height="22" rx="6" fill="#7fb6f2"/><rect x="110" y="40" width="22" height="22" rx="6" fill="#f28fb0"/>
+            <rect x="20" y="76" width="22" height="22" rx="6" fill="#c9cdd2"/><rect x="50" y="76" width="22" height="22" rx="6" fill="#9fe0e8"/><rect x="80" y="76" width="22" height="22" rx="6" fill="#e8e08f"/><rect x="110" y="76" width="22" height="22" rx="6" fill="#b49ff2"/>
+            <rect x="20" y="112" width="22" height="22" rx="6" fill="#f2a08f"/><rect x="110" y="112" width="22" height="22" rx="6" fill="#8ff2c4"/>
+          </g>
+          <rect x="41" y="144" width="68" height="68" rx="18" fill="none" stroke="#e2ff3b" stroke-width="4"/>
+          <rect x="41" y="144" width="68" height="68" rx="18" fill="none" stroke="#e2ff3b" stroke-width="10" opacity=".25"/>
+          <image href="art.jpg" x="47" y="150" width="56" height="56" clip-path="url(#wcIcon)" preserveAspectRatio="xMidYMid slice"/>
+          <text x="75" y="226" text-anchor="middle" font-size="9.5" font-weight="800" fill="#fff" font-family="system-ui,sans-serif">Winter Classic</text>
+          <path d="M126 168 l-12 10 l12 10" stroke="#e2ff3b" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="18" y="246" width="114" height="26" rx="10" fill="#fff" opacity=".18"/>
+          <g opacity=".6"><rect x="26" y="250" width="18" height="18" rx="5" fill="#8fd18f"/><rect x="52" y="250" width="18" height="18" rx="5" fill="#7fb6f2"/><rect x="80" y="250" width="18" height="18" rx="5" fill="#f2b45c"/><rect x="106" y="250" width="18" height="18" rx="5" fill="#f28fb0"/></g>
+        </svg>
+        <div class="hstext">
+          <b>Keep it on your phone like an app!</b>
+          <span>Save the guide to your home screen and the Winter Classic icon opens updates, check-in and the map in one tap all weekend.</span>
       <details class="homescreen">
         <summary>🚨 Save this guide to your phone's home screen! 📲</summary>
         <p>Add this guide to your home screen and it opens like an app, with the Winter Classic logo as its icon.</p>
         <p><strong>iPhone:</strong> open this page in Safari, tap the Share button (the square with the arrow), then <strong>Add to Home Screen</strong> and <strong>Add</strong>.</p>
         <p><strong>Android:</strong> in Chrome, tap the <strong>⋮</strong> menu, then <strong>Add to Home screen</strong> and <strong>Add</strong>.</p>
       </details>
+        </div>
+      </div>
     </div>
   </header>
 </div>
@@ -609,7 +643,7 @@ fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&c
 
 // Auto-refresh: when a newer version of this card is published, load it (helps saved home screen icons)
 {
-  const BUILD = 'wc-2026-11-26-3';
+  const BUILD = 'wc-2026-11-26-4';
   const check = () => fetch(location.pathname + '?check=' + Date.now(), { cache: 'no-store' })
     .then(r => r.text())
     .then(t => {
