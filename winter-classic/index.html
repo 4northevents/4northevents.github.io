@@ -192,6 +192,14 @@ section.shirt{background:linear-gradient(135deg,#ff3d8b,#c2185b 60%,#7a1048);bor
 .burst{position:absolute;top:2%;right:-2%;width:30%;max-width:110px;aspect-ratio:1;transform:rotate(12deg);filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))}
 .burst svg{width:100%;height:100%;display:block}
 .burst b{position:absolute;inset:0;display:grid;place-items:center;font:clamp(22px,4vw,30px)/1 'Alfa Slab One',serif;color:#7a1048}
+.upd-box{border:2px solid var(--pink);box-shadow:0 0 24px rgba(255,61,139,.2)}
+.upd{border-left:4px solid var(--ball);padding:6px 0 6px 14px;margin:0 0 14px}
+.upd time{display:block;font-size:13px;color:var(--ball);font-weight:800;margin-bottom:2px}
+.upd p{margin:0;white-space:pre-line;overflow-wrap:anywhere}
+.upd.clamp p{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.upd .rm{background:none;border:0;color:var(--ice);font:700 14px Outfit,sans-serif;padding:6px 0;cursor:pointer;min-height:32px}
+#updmore{margin-bottom:4px}
+#updmore[hidden]{display:none}
 .alerts{grid-column:1/-1;margin:0;background:var(--card);border:2px solid var(--pink);box-shadow:0 0 24px rgba(255,61,139,.2);border-radius:18px}
 .alerts summary{display:flex;align-items:center;gap:12px;padding:14px 16px}
 .alerts summary svg{width:38px;height:38px;flex:none}
@@ -229,7 +237,7 @@ section.shirt{background:linear-gradient(135deg,#ff3d8b,#c2185b 60%,#7a1048);bor
 </div>
 
 <nav aria-label="Sections"><div class="scroll">
-  <a class="pill live" href="#alerts">Alerts</a>
+  <a class="pill live" href="#updates">Updates</a>
   <a class="pill gold" href="#shop">Shirts $25</a>
   <a class="pill" href="#checkin">Check-in</a>
   <a class="pill" href="#schedules">Schedules</a>
@@ -244,6 +252,13 @@ section.shirt{background:linear-gradient(135deg,#ff3d8b,#c2185b 60%,#7a1048);bor
 
 <div class="wrap">
 <main>
+  <section id="updates" class="wide upd-box">
+    <div class="sechead"><svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 20v10h8l14 9V11L14 20z" fill="#ff3d8b"/><path d="M34 17a10 10 0 0 1 0 16M38 11a17 17 0 0 1 0 28" stroke="#9fdcff" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg><h2>Tournament updates</h2><span class="live">LIVE</span></div>
+    <div id="updlist"><div class="soon">Loading the latest updates…</div></div>
+    <button type="button" class="btn" id="updmore" hidden>Show all updates</button>
+    <p class="note">Updates come straight from the director's USSSA alerts. <a href="https://www.usssa.com/events/422861/event-updates">View on USSSA</a></p>
+  </section>
+
   <details class="push alerts wide" id="alerts">
       <summary><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 20v10h8l14 9V11L14 20z" fill="#ff3d8b"/><path d="M34 17a10 10 0 0 1 0 16M38 11a17 17 0 0 1 0 28" stroke="#9fdcff" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg><span>Get tournament alerts on your phone<small>Delays, schedule changes &amp; announcements · tap here</small></span><i aria-hidden="true">+</i></summary>
       <p>Weather delays, schedule changes, lost and found and other announcements are sent through <strong>USSSA push notifications</strong>.</p>
@@ -552,6 +567,31 @@ fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&c
     bd.setAttribute('aria-label', `Right now in Levelland: ${t} degrees, ${w}. Tap for the full forecast.`);
   })
   .catch(() => {});
+
+// Live tournament updates from the director's USSSA alerts
+{
+  const FEED = 'https://script.google.com/macros/s/AKfycbyMNwB87MfVxDYYThvt7V8O4oc91lUk94hP92wIYLqr_dH7ehT13zM7Z8nUdgWET9JJ/exec?event=422861';
+  const box = document.getElementById('updlist'), more = document.getElementById('updmore');
+  let all = [], showAll = false;
+  const when = t => { const d = new Date(String(t).replace(/([+-]\d\d)(\d\d)$/, '$1:$2')); return isNaN(d) ? '' : d.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/Chicago' }); };
+  const linkify = m => esc(m).replace(/https?:\/\/[^\s<]+/g, u => `<a href="${u}">${u.length > 40 ? u.slice(0, 38) + '…' : u}</a>`);
+  const draw = () => {
+    if (!all.length) { box.innerHTML = '<div class="soon">No updates yet. When the director sends a USSSA alert, it shows up here.</div>'; more.hidden = true; return; }
+    const list = showAll ? all : all.slice(0, 3);
+    box.innerHTML = list.map(f => `<div class="upd${f.message.length > 280 ? ' clamp' : ''}"><time>${esc(when(f.timestamp))}</time><p>${linkify(f.message)}</p>${f.message.length > 280 ? '<button type="button" class="rm">Read more</button>' : ''}</div>`).join('');
+    more.hidden = all.length <= 3;
+    more.textContent = showAll ? 'Show fewer' : `Show all ${all.length} updates`;
+  };
+  box.addEventListener('click', e => { if (e.target.classList.contains('rm')) { const u = e.target.parentElement; u.classList.toggle('clamp'); e.target.textContent = u.classList.contains('clamp') ? 'Read more' : 'Show less'; } });
+  more.addEventListener('click', () => { showAll = !showAll; draw(); });
+  const load = () => fetch(FEED).then(r => r.json()).then(j => {
+    all = (j.feeds || []).filter(f => f && f.message).sort((a, b) => String(b.timestamp).localeCompare(String(a.timestamp)));
+    draw();
+  }).catch(() => { if (!all.length) box.innerHTML = '<div class="soon">Updates couldn\'t load right now. Tap "View on USSSA" below.</div>'; });
+  load();
+  setInterval(() => { if (!document.hidden) load(); }, 120000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
+}
 
 // Snow
 const snow = document.getElementById('snow');
